@@ -1,16 +1,37 @@
-# React + Vite
+# Frontend App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend desarrollada con React + Vite, contenedorizada con Docker y desplegada mediante pipeline CI/CD con GitHub Actions.
 
-Currently, two official plugins are available:
+## Tecnologías
+- React + Vite
+- Docker (multi-stage build)
+- Nginx (servidor de producción)
+- GitHub Actions (CI/CD)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Estructura del proyecto
+frontend-app/
+├── .github/workflows/deploy.yml  # Pipeline CI/CD
+├── src/                          # Código fuente React
+├── Dockerfile                    # Multi-stage build
+├── .env                          # Variables de entorno
+└── vite.config.js
 
-## React Compiler
+## Variables de entorno
+| Variable | Descripción |
+|----------|-------------|
+| VITE_API_URL | URL del backend (ej: http://localhost:3000) |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Cómo ejecutar localmente
+```bash
+docker build --build-arg VITE_API_URL=http://localhost:3000 -t frontend-app .
+docker run -p 80:80 frontend-app
+```
+Abrir: http://localhost
 
-## Expanding the ESLint configuration
+## Pipeline CI/CD
+El pipeline se activa con push a la rama `deploy` y realiza:
+1. Build de la imagen Docker
+2. Push a Docker Hub (`cris7o/frontend-app:latest`)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Imagen Docker Hub
+docker pull cris7o/frontend-app:latest
